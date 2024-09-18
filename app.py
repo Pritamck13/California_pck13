@@ -39,9 +39,17 @@ async def predict_api(data: DataModel):
 
 
 @app.post("/predict")
-async def predict_form(request: Request, form_data: List[float] = Form(...)):
+async def predict_form(request: Request,MedInc:float = Form(...),
+                                        HouseAge:float = Form(...),
+                                        AveRooms:float = Form(...),
+                                        AveBedrms:float = Form(...),
+                                        Population:float = Form(...),
+                                        AveOccup:float = Form(...),
+                                        Latitude:float = Form(...),
+                                        Longitude:float = Form(...)):
     # Process form data
-    transformed_data = scalar.transform(np.array(form_data).reshape(1, -1))
+    input_data = [MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude]
+    transformed_data = scalar.transform([input_data])
     prediction = regmodel.predict(transformed_data)[0]
     # Render prediction in the template
     return templates.TemplateResponse("home.html", {
